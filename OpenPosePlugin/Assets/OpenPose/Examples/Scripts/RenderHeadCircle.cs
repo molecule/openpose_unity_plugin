@@ -1,4 +1,5 @@
 ﻿// OpenPose Unity Plugin v1.0.0alpha-1.5.0
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,9 @@ namespace OpenPose.Example {
         private RectTransform rectTransform { get { return GetComponent<RectTransform>(); } }
         private Image image { get { return GetComponent<Image>(); } }
 
-		private bool findKeypointsRect(RectTransform[] keypoints, out Rect rect){
+        private RectTransform mRectTransform { get { return GetComponent<RectTransform>(); } }
+
+        private bool findKeypointsRect(RectTransform[] keypoints, out Rect rect){
             bool res = false;
             float xMin = float.PositiveInfinity, yMin = float.PositiveInfinity;
             float xMax = float.NegativeInfinity, yMax = float.NegativeInfinity;
@@ -58,6 +61,7 @@ namespace OpenPose.Example {
                     var childList = keypointsParent.GetComponentsInChildren<RectTransform>(false);
                     // If >= 20 keypoints detected, draw face using keypoints rect.
                     if (childList.Length >= 20){
+                        Debug.Log("RenderHeadCircles - > 20 keypoints...");
                         Rect rect;
                         if (findKeypointsRect(childList, out rect)) {
                             image.enabled = true;
@@ -67,6 +71,7 @@ namespace OpenPose.Example {
                     }
                     // Less than 20 keypoints detected, draw face using faceRectangle
                     else {
+                        Debug.Log("RenderHeadCircles - less than 20 keypoints...");
                         if (faceRect){
                             if (faceRect.gameObject.activeInHierarchy) {
                                 image.enabled = true;
@@ -80,9 +85,13 @@ namespace OpenPose.Example {
                 }
                 // Face disabled, draw face using center joint (nose)
                 else {
+                    Debug.Log("RenderHeadCircles - face disabled...");
                     if (faceCenter) {
+                        // the image is what gets plastered onto the tracked face.
                         image.enabled = faceCenter.gameObject.activeInHierarchy;
-                        rectTransform.sizeDelta = Vector2.one * 150f;
+                        
+                        rectTransform.sizeDelta = Vector2.one * 250f;
+                        rectTransform.rotation = Quaternion.identity;
                         rectTransform.localPosition = faceCenter.localPosition;
                     }
                 }
