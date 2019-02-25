@@ -92,7 +92,8 @@ namespace OpenPose.Example {
                         
                         rectTransform.sizeDelta = Vector2.one * 250f;
                         rectTransform.rotation = Quaternion.identity;
-                        rectTransform.localPosition = faceCenter.localPosition;
+                        Vector3 shiftedUp = new Vector3(faceCenter.localPosition.x, faceCenter.localPosition.y - 30);
+                        rectTransform.localPosition = shiftedUp;
                     }
                 }
             }
